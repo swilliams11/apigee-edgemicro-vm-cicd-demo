@@ -19,10 +19,13 @@ sudo bash install-logging-agent.sh
 #start edgemicro gateway
 cd ~
 
-#fetch the config file from github
-sudo curl https://raw.githubusercontent.com/swilliams11/apigee-edgemicro-vm-cicd-demo/master/gcp-deployment-manager/config/microgateway-startup.sh -o ~/microgateway-startup.sh
-sudo chmod 777 microgateway-startup.sh
-. microgateway-startup.sh
+EDGEMICRO_ORG=`curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/EDGEMICRO_ORG"    -H "Metadata-Flavor: Google"`
+EDGEMICRO_ENV=`curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/EDGEMICRO_ENV"    -H "Metadata-Flavor: Google"`
+EDGEMICRO_KEY=`curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/EDGEMICRO_KEY"    -H "Metadata-Flavor: Google"`
+EDGEMICRO_SECRET=`curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/EDGEMICRO_SECRET"    -H "Metadata-Flavor: Google"`
+EDGEMICRO_CONFIG=`curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/EDGEMICRO_CONFIG"    -H "Metadata-Flavor: Google"`
+sudo mkdir .edgemicro
+sudo echo $EDGEMICRO_CONFIG | base64 -d >> .edgemicro/$EDGEMICRO_ORG-$EDGEMICRO_ENV-config.yaml
 
 #start express gateway in the background
 nohup edgemicro start -k $EDGEMICRO_KEY -s $EDGEMICRO_SECRET -o $EDGEMICRO_ORG -e $EDGEMICRO_ENV  &
