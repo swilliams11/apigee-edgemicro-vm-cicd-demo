@@ -1,0 +1,51 @@
+# Express Gateway config
+http:
+  port: 9001
+admin:
+  port: 9876
+apiEndpoints:
+  api:
+    paths: '/ip'
+  hello:
+    paths:
+      - '/'
+      - ''
+  hello2:
+    host: demo-prod
+    paths:
+      - '/'
+      - ''
+serviceEndpoints:
+  httpbin:
+    url: 'https://httpbin.org'
+  helloworld:
+    url: 'http://10.0.0.4:8080'
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+pipelines:
+  default:
+    apiEndpoints:
+      - api
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    # - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: httpbin
+              changeOrigin: true
+  pipeline1:
+    apiEndpoints:
+      - hello
+      - hello2
+    policies:
+      - proxy:
+          - action:
+               serviceEndpoint: helloworld
+               changeOrigin: true

@@ -1,0 +1,46 @@
+{% set startupScript = env["name"] %}
+{% set GATEWAY1 = "edge-microgateway-1" %}
+{% set GATEWAY2 = "edge-microgateway-2" %}
+{% set NODEJS_BACKEND = "nodejs-backendtemp" %}
+
+
+resources:
+- type: compute.v1.instance
+  name: {{ env["name"] }}
+  properties:
+    # The properties of the resource depend on the type of resource. For a list
+    # of properties, see the API reference for the resource.
+    zone: {{ properties["zone"] }}
+    # Replace [MY_PROJECT] with your project ID
+    machineType: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/machineTypes/{{ properties["machine-type"] }}
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        # Replace [FAMILY_NAME] with the image family name.
+        # See a full list of image families at https://cloud.google.com/compute/docs/images#os-compute-support
+        sourceImage: https://www.googleapis.com/compute/v1/projects/{{ properties["machine-project"] }}/global/images/family/{{ properties["machine-family"] }}
+    # Replace [MY_PROJECT] with your project ID
+    tags:
+      items: {{ properties["tags"] }}
+    networkInterfaces:
+    - network: $(ref.{{ properties["network"] }}.selfLink)
+      networkIP: {{ properties["internal-ip"] }}
+      # Access Config required to give the instance a public IP address
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    {% if (startupScript == GATEWAY1) or (startupScript == GATEWAY2) %}
+    metadata:
+      items:
+        - key: startup-script-url
+          value: {{ properties["startup-script"] }}
+    {% endif %}
+    serviceAccounts:
+      - email: default
+        scopes:
+          - https://www.googleapis.com/auth/logging.write
+          - https://www.googleapis.com/auth/monitoring.write
+          - https://www.googleapis.com/auth/devstorage.read_only

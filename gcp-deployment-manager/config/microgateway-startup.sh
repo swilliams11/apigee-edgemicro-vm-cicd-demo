@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+EDGEMICRO_ORG=org
+EDGEMICRO_ENV=test
+EDGEMICRO_KEY=key
+EDGEMICRO_SECRET=secret

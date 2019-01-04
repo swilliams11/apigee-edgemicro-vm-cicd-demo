@@ -1,0 +1,79 @@
+{% set  NETWORK_NAME = env['deployment'] + '-' + 'network' %}
+{% set  BUCKET_NAME = env['deployment'] %}
+
+resources:
+#- name: edgeaiotemp
+#  type: vm-template.jinja
+#  properties:
+#    zone: us-central1-c
+#    network: {{ NETWORK_NAME }}
+#    machine-type: n1-standard-8
+#    machine-project: centos-cloud
+#    machine-family: centos-7
+#    tags: ["http-server", "https-server", "edge"]
+#    internal-ip: 10.0.0.2
+- name: edge-microgateway-1
+  type: vm-template.jinja
+  properties:
+    zone: us-central1-c
+    network: {{ NETWORK_NAME }}
+    machine-type: n1-standard-1
+    machine-project: centos-cloud
+    machine-family: centos-7
+    tags: ["http-server", "https-server", "nodegateway"]
+    internal-ip: 10.0.0.3
+    startup-script: gs://{{ BUCKET_NAME }}/edge-microgateway.sh
+- name: edge-microgateway-2
+  type: vm-template.jinja
+  properties:
+    zone: us-central1-c
+    network: {{ NETWORK_NAME }}
+    machine-type: n1-standard-1
+    machine-project: centos-cloud
+    machine-family: centos-7
+    tags: ["http-server", "https-server", "nodegateway"]
+    internal-ip: 10.0.0.4
+    startup-script: gs://{{ BUCKET_NAME }}/edge-microgateway.sh
+- name: {{ NETWORK_NAME }}
+  type: network-template.jinja
+- name: edgetemp
+  type: firewall-template.jinja
+  properties:
+    network: {{ NETWORK_NAME }}
+    ports: ["8080", "9000", "9001"]
+- name: allow-ssh
+  type: firewall-template.jinja
+  properties:
+    network: {{ NETWORK_NAME }}
+    ports: ["22"]
+- name: nodegatewaytemp
+  type: firewall-template.jinja
+  properties:
+    network: {{ NETWORK_NAME }}
+    ports: ["8080", "9001"]
+- name: nodejstemp
+  type: firewall-template.jinja
+  properties:
+    network: {{ NETWORK_NAME }}
+    ports: ["8080"]
+- name: nodejs-grouptemp
+  type: instance-group-template.jinja
+  properties:
+    port-name: http
+    port: 9001
+    network: {{ NETWORK_NAME }}
+    zone: us-central1-c
+- name: nodejs-healthcheck2
+  type: health-check-template.jinja
+  properties:
+    port-name: http
+    port: 9001
+    protocol: TCP
+- name: http-lb
+  type: load-balancer-template.jinja
+  properties:
+    nodejs-group-name: nodejs-grouptemp
+    nodejs-health-check-name: nodejs-healthcheck2
+    ip-protocol: TCP
+    port-range: 8080-8080
+    zone: us-central1-c
