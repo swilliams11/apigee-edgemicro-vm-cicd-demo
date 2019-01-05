@@ -18,6 +18,8 @@ sudo bash install-logging-agent.sh
 
 #start edgemicro gateway
 cd ~
+sudo curl https://raw.githubusercontent.com/swilliams11/apigee-edgemicro-vm-cicd-demo/master/update-microgateway/edge-microgateway.sh -o ~/restart-edgemicro.sh
+sudo chmod 777 ~/restart-edgemicro.sh
 
 EDGEMICRO_ORG=`curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/EDGEMICRO_ORG"    -H "Metadata-Flavor: Google"`
 EDGEMICRO_ENV=`curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/EDGEMICRO_ENV"    -H "Metadata-Flavor: Google"`
