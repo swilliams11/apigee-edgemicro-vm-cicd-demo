@@ -1,0 +1,19 @@
+steps:
+# npm install in the logger directory
+#- name: 'gcr.io/cloud-builders/npm'
+#  args: ['install', '--prefix', './plugins/logger']
+
+# update edgemicrogateway with the following shell script
+- name: gcr.io/cloud-builders/gcloud
+  args: ['compute', 'scp', '--project', '$PROJECT_ID', '--zone', 'us-central1-c', './update-edgemicro.sh', 'edge-microgateway-1:~']
+
+- name: gcr.io/cloud-builders/gcloud
+  args: ['compute', 'scp', '--project', '$PROJECT_ID', '--zone', 'us-central1-c', './update-edgemicro.sh', 'edge-microgateway-2:~']
+#  volumes:
+#  - name: 'vol1'
+#    path: '/mypath'
+- name: gcr.io/cloud-builders/gcloud
+  args: ['compute', 'ssh', '--project', '$PROJECT_ID', '--zone', 'us-central1-c', 'edge-microgateway-1', '--', '~/restart-edgemicro.sh']
+
+- name: gcr.io/cloud-builders/gcloud
+  args: ['compute', 'ssh', '--project', '$PROJECT_ID', '--zone', 'us-central1-c', 'edge-microgateway-2', '--', '~/restart-edgemicro.sh']
