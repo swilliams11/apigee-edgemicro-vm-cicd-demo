@@ -5,7 +5,7 @@ steps:
 
 # set the edgemicro version with the metadata field
 - name: gcr.io/cloud-builders/gcloud
-  args: ['compute', 'instances', 'add-metadata', 'edge-microgateway-1', '--metadata', 'EM_VERSION=$TAG_NAME' '--project', '$PROJECT_ID', '--zone', 'us-central1-c']
+  args: ['compute', 'instances', 'add-metadata', 'edge-microgateway-1', '--metadata', 'EM_VERSION=$TAG_NAME', '--project', '$PROJECT_ID', '--zone', 'us-central1-c']
 
 # update edgemicrogateway with the following shell script
 #- name: gcr.io/cloud-builders/gcloud
