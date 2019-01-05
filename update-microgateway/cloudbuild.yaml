@@ -20,6 +20,7 @@ steps:
 
 - name: gcr.io/cloud-builders/gcloud
   args: ['compute', 'ssh', '--project', '$PROJECT_ID', '--zone', 'us-central1-c', 'edge-microgateway-1', '--', '~/restart-edgemicro.sh']
+  timeout: 60s
 
 - name: gcr.io/cloud-builders/gcloud
   args: ['compute', 'ssh', '--project', '$PROJECT_ID', '--zone', 'us-central1-c', 'edge-microgateway-2', '--', '~/restart-edgemicro.sh']
