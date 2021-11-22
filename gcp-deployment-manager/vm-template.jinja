@@ -37,6 +37,16 @@ resources:
       items:
         - key: startup-script-url
           value: {{ properties["startup-script"] }}
+        - key: EDGEMICRO_ORG
+          value: {{ properties["EDGEMICRO_ORG"] }}
+        - key: EDGEMICRO_ENV
+          value: {{ properties["EDGEMICRO_ENV"] }}
+        - key: EDGEMICRO_KEY
+          value: {{ properties["EDGEMICRO_KEY"] }}
+        - key: EDGEMICRO_SECRET
+          value: {{ properties["EDGEMICRO_SECRET"] }}
+        - key: EDGEMICRO_CONFIG
+          value: {{ properties["EDGEMICRO_CONFIG"] }}
     {% endif %}
     serviceAccounts:
       - email: default

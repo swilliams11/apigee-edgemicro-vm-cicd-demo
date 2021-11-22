@@ -33,17 +33,17 @@ chmod 777 *.sh
   * configuration file (YAML) that is named `org-env-config.yaml`, which should be located in `~/.edgemicro` on the machine where you executed the `edgemicro configure` command.
   * and it will also generate a key and secret that you need to start Edge Microgateway.  
 * Copy your Microgateway config file (`org-env-config.yaml`) into the `gcp-deployment-manager/config` directory.
-* Update the `gcp-deployment-manager/config/microgateway-startup.sh` file with your
+* Base64 encode the Microgateway configuration file.
+```
+cat config/williamssean-test-config.yaml | base64
+```
+* Update the `gcp-deployment-manager/microgateway-cicd-demo.yaml` file with your
   * Apigee Edge organization name
   * Apigee Edge environment name
   * Microgateway key
   * Microgateway secret
-```
-APIGEE_ORG=org
-APIGEE_ENV=test
-KEY=123
-SECRET=12324
-```
+  * Edge Microgateway configuration file
+
 
 ### Create the deployment
 ```

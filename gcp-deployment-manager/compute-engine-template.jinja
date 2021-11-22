@@ -23,6 +23,11 @@ resources:
     tags: ["http-server", "https-server", "nodegateway"]
     internal-ip: 10.0.0.3
     startup-script: gs://{{ BUCKET_NAME }}/edge-microgateway.sh
+    EDGEMICRO_ORG: {{ properties["EDGEMICRO_ORG"] }}
+    EDGEMICRO_ENV: {{ properties["EDGEMICRO_ENV"] }}
+    EDGEMICRO_KEY: {{ properties["EDGEMICRO_KEY"] }}
+    EDGEMICRO_SECRET: {{ properties["EDGEMICRO_SECRET"] }}
+    EDGEMICRO_CONFIG: {{ properties["EDGEMICRO_CONFIG"] }}
 - name: edge-microgateway-2
   type: vm-template.jinja
   properties:
@@ -34,6 +39,11 @@ resources:
     tags: ["http-server", "https-server", "nodegateway"]
     internal-ip: 10.0.0.4
     startup-script: gs://{{ BUCKET_NAME }}/edge-microgateway.sh
+    EDGEMICRO_ORG: {{ properties["EDGEMICRO_ORG"] }}
+    EDGEMICRO_ENV: {{ properties["EDGEMICRO_ENV"] }}
+    EDGEMICRO_KEY: {{ properties["EDGEMICRO_KEY"] }}
+    EDGEMICRO_SECRET: {{ properties["EDGEMICRO_SECRET"] }}
+    EDGEMICRO_CONFIG: {{ properties["EDGEMICRO_CONFIG"] }}
 - name: {{ NETWORK_NAME }}
   type: network-template.jinja
 - name: edgetemp
